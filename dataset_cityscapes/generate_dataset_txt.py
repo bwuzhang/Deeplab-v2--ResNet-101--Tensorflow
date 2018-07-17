@@ -11,9 +11,9 @@ def main():
 	# how to search for all ground truth
 	searchTrainFine = os.path.join(cityscapesPath, "gtFine", "train" , "*", "*_gt*_labelTrainIds.png")
 	searchValFine = os.path.join(cityscapesPath, "gtFine", "val" , "*", "*_gt*_labelTrainIds.png")
-	searchTrainImg = os.path.join(cityscapesPath, "leftImg8bit", "train" , "*", "*_leftImg8bit.png")
-	searchValImg = os.path.join(cityscapesPath, "leftImg8bit", "val" , "*", "*_leftImg8bit.png")
-	searchTestImg = os.path.join(cityscapesPath, "leftImg8bit", "test" , "*", "*_leftImg8bit.png")
+	searchTrainImg = os.path.join(cityscapesPath, "img", "train" , "*", "*_leftImg8bit.png")
+	searchValImg = os.path.join(cityscapesPath, "img", "val" , "*", "*_leftImg8bit.png")
+	searchTestImg = os.path.join(cityscapesPath, "img", "test" , "*", "*_leftImg8bit.png")
 
 	# search files
 	filesTrainFine = glob.glob(searchTrainFine)
@@ -49,19 +49,16 @@ def main():
 	print('Total #{} of files'.format(len(files)))
 
 	# create txt
-	dir_path = ''
-	if not os.path.exists(dir_path):
-		os.makedirs(dir_path)
 	print("---create test.txt---")
-	with open(os.path.join(dir_path, 'test.txt'), 'w') as f:
+	with open('test.txt', 'w') as f:
 		for l in filesTestImg:
 			f.write(l[len(cityscapesPath):] + '\n')
 	print("---create train_fine.txt---")
-	with open(os.path.join(dir_path, 'train_fine.txt'), 'w') as f:
+	with open('train_fine.txt', 'w') as f:
 		for l in zip(filesTrainImg, filesTrainFine):
 			f.write(l[0][len(cityscapesPath):] + ' ' + l[1][len(cityscapesPath):] + '\n')
 	print("---create val_fine.txt---")
-	with open(os.path.join(dir_path, 'val_fine.txt'), 'w') as f:
+	with open('val_fine.txt', 'w') as f:
 		for l in zip(filesValImg, filesValFine):
 			f.write(l[0][len(cityscapesPath):] + ' ' + l[1][len(cityscapesPath):] + '\n')
 # call the main
