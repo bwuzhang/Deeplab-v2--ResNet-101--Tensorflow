@@ -23,7 +23,7 @@ different learning rates for different layers
 
 
 
-IMG_MEAN = np.array((104.00698793,116.66876762,122.67891434), dtype=np.float32)
+IMG_MEAN = np.array((122.67891434,116.66876762,104.00698793), dtype=np.float32)
 
 class Model(object):
 
@@ -148,13 +148,13 @@ class Model(object):
 
 	def train_setup(self):
 		tf.set_random_seed(self.conf.random_seed)
-		
+
 		# Create queue coordinator.
 		self.coord = tf.train.Coordinator()
 
 		# Input size
 		input_size = (self.conf.input_height, self.conf.input_width)
-		
+
 		# Load reader
 		with tf.name_scope("create_inputs"):
 			reader = ImageReader(
@@ -167,7 +167,7 @@ class Model(object):
 				IMG_MEAN,
 				self.coord)
 			self.image_batch, self.label_batch = reader.dequeue(self.conf.batch_size)
-		
+
 		# Create network
 		if self.conf.encoder_name not in ['res101', 'res50', 'deeplab']:
 			print('encoder_name ERROR!')
@@ -193,7 +193,7 @@ class Model(object):
 			encoder_trainable = [v for v in all_trainable if 'resnet_v1' in v.name] # lr * 1.0
 			# Decoder part
 			decoder_trainable = [v for v in all_trainable if 'decoder' in v.name]
-		
+
 		decoder_w_trainable = [v for v in decoder_trainable if 'weights' in v.name or 'gamma' in v.name] # lr * 10.0
 		decoder_b_trainable = [v for v in decoder_trainable if 'biases' in v.name or 'beta' in v.name] # lr * 20.0
 		# Check
@@ -289,7 +289,7 @@ class Model(object):
 			image, label = reader.image, reader.label # [h, w, 3 or 1]
 		# Add one batch dimension [1, h, w, 3 or 1]
 		self.image_batch, self.label_batch = tf.expand_dims(image, dim=0), tf.expand_dims(label, dim=0)
-		
+
 		# Create network
 		if self.conf.encoder_name not in ['res101', 'res50', 'deeplab']:
 			print('encoder_name ERROR!')
@@ -389,7 +389,7 @@ class Model(object):
 	def load(self, saver, filename):
 		'''
 		Load trained weights.
-		''' 
+		'''
 		saver.restore(self.sess, filename)
 		print("Restored model parameters from {}".format(filename))
 

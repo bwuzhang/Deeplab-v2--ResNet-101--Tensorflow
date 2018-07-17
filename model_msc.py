@@ -23,7 +23,7 @@ different learning rates for different layers
 
 
 
-IMG_MEAN = np.array((104.00698793,116.66876762,122.67891434), dtype=np.float32)
+IMG_MEAN = np.array((122.67891434,116.66876762,104.00698793), dtype=np.float32)
 
 class Model_msc(object):
 
@@ -155,17 +155,17 @@ class Model_msc(object):
 		# finish
 		self.coord.request_stop()
 		self.coord.join(threads)
-		
+
 	def train_setup(self):
 		tf.set_random_seed(self.conf.random_seed)
-		
+
 		# Create queue coordinator.
 		self.coord = tf.train.Coordinator()
 
 		# Input size
 		h, w = (self.conf.input_height, self.conf.input_width)
 		input_size = (h, w)
-		
+
 		# Load reader
 		with tf.name_scope("create_inputs"):
 			reader = ImageReader(
@@ -243,7 +243,7 @@ class Model_msc(object):
 		indices = tf.squeeze(tf.where(tf.less_equal(raw_gt, self.conf.num_classes - 1)), 1)
 		indices075 = tf.squeeze(tf.where(tf.less_equal(raw_gt075, self.conf.num_classes - 1)), 1)
 		indices05 = tf.squeeze(tf.where(tf.less_equal(raw_gt05, self.conf.num_classes - 1)), 1)
-		
+
 		gt = tf.cast(tf.gather(raw_gt, indices), tf.int32)
 		gt075 = tf.cast(tf.gather(raw_gt075, indices075), tf.int32)
 		gt05 = tf.cast(tf.gather(raw_gt05, indices05), tf.int32)
@@ -349,7 +349,7 @@ class Model_msc(object):
 		h_orig, w_orig = tf.to_float(tf.shape(self.image_batch)[1]), tf.to_float(tf.shape(self.image_batch)[2])
 		image_batch_075 = tf.image.resize_images(self.image_batch, tf.stack([tf.to_int32(tf.multiply(h_orig, 0.75)), tf.to_int32(tf.multiply(w_orig, 0.75))]))
 		image_batch_05 = tf.image.resize_images(self.image_batch, tf.stack([tf.to_int32(tf.multiply(h_orig, 0.5)), tf.to_int32(tf.multiply(w_orig, 0.5))]))
-		
+
 		# Create network
 		if self.conf.encoder_name not in ['res101', 'res50', 'deeplab']:
 			print('encoder_name ERROR!')
@@ -427,7 +427,7 @@ class Model_msc(object):
 		h_orig, w_orig = tf.to_float(tf.shape(image_batch)[1]), tf.to_float(tf.shape(image_batch)[2])
 		image_batch_075 = tf.image.resize_images(image_batch, tf.stack([tf.to_int32(tf.multiply(h_orig, 0.75)), tf.to_int32(tf.multiply(w_orig, 0.75))]))
 		image_batch_05 = tf.image.resize_images(image_batch, tf.stack([tf.to_int32(tf.multiply(h_orig, 0.5)), tf.to_int32(tf.multiply(w_orig, 0.5))]))
-		
+
 
 		# Create network
 		if self.conf.encoder_name not in ['res101', 'res50', 'deeplab']:
@@ -485,7 +485,7 @@ class Model_msc(object):
 	def load(self, saver, filename):
 		'''
 		Load trained weights.
-		''' 
+		'''
 		saver.restore(self.sess, filename)
 		print("Restored model parameters from {}".format(filename))
 

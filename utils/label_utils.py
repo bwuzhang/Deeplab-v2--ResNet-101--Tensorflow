@@ -16,14 +16,14 @@ label_colours = [(0,0,0)
 
 def decode_labels(mask, num_images=1, num_classes=21):
     """Decode batch of segmentation masks.
-    
+
     Args:
       mask: result of inference after taking argmax.
       num_images: number of images to decode from the batch.
       num_classes: number of classes to predict (including background).
-    
+
     Returns:
-      A batch with num_images RGB images of the same size as the input. 
+      A batch with num_images RGB images of the same size as the input.
     """
     n, h, w, c = mask.shape
     assert(n >= num_images), 'Batch size %d should be greater or equal than number of images to save %d.' % (n, num_images)
@@ -61,12 +61,12 @@ def prepare_label(input_batch, new_size, num_classes, one_hot=True):
 def inv_preprocess(imgs, num_images, img_mean):
     """Inverse preprocessing of the batch of images.
        Add the mean vector and convert from BGR to RGB.
-       
+
     Args:
       imgs: batch of input images.
       num_images: number of images to apply the inverse transformations on.
       img_mean: vector of mean colour values.
-  
+
     Returns:
       The batch of the size num_images with the same spatial dimensions as the input.
     """
@@ -74,5 +74,5 @@ def inv_preprocess(imgs, num_images, img_mean):
     assert(n >= num_images), 'Batch size %d should be greater or equal than number of images to save %d.' % (n, num_images)
     outputs = np.zeros((num_images, h, w, c), dtype=np.uint8)
     for i in range(num_images):
-        outputs[i] = (imgs[i] + img_mean)[:, :, ::-1].astype(np.uint8)
+        outputs[i] = (imgs[i] + img_mean).astype(np.uint8)
     return outputs
